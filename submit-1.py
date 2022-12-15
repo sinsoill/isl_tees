@@ -34,7 +34,7 @@ def task1():
     SP = init_gdb()
     gdb_cmd_exec(SP, "break gcm_crypt_and_tag\n")
     gdb_cmd_exec(SP, f"run {PATH}/sp_server.py\n")
-    os.system(f".{PATH}/start.sh")
+    os.system("./start.sh")
     sleep(3)
     gdb_cmd_exec(SP, "continue\n")
     sleep(3)
