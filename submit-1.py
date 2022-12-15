@@ -41,7 +41,7 @@ def task1():
     gdb_cmd_exec(SP, "break gcm_crypt_and_tag\n")
     gdb_cmd_exec(SP, "run sp_server.py\n")
     #os.system(f"cd {PATH}  && {PATH}/start.sh")
-    RP = Popen([f"{PATH}/start.sh"])
+    RP = Popen([f"{PATH}/start.sh"],shell=True)
     sleep(3)
     gdb_cmd_exec(SP, "continue\n")
     sleep(3)
@@ -49,7 +49,8 @@ def task1():
     sleep(3)
     gdb_cmd_exec(SP, COMMAND+"\n")
     sleep(3)
-
+    SP.stdin.close()
+    SP.stdout.close()
 if __name__ == "__main__":
     reset()
     task1() 
