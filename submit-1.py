@@ -34,13 +34,13 @@ def task1():
     gdb_cmd_exec(SP, "break gcm_crypt_and_tag\n")
     gdb_cmd_exec(SP, f"run {PATH}/sp_server.py\n")
     os.system(f".{PATH}/start.sh")
-    sleep(1)
+    sleep(3)
     gdb_cmd_exec(SP, "continue\n")
-    sleep(1)
+    sleep(3)
     gdb_cmd_exec(SP, "continue\n")
-    sleep(1)
+    sleep(3)
     gdb_cmd_exec(SP, COMMAND+"\n")
-    sleep(1)
+    sleep(3)
 
 if __name__ == "__main__":
     reset()
