@@ -14,7 +14,8 @@ def gdb_cmd_exec(p,cmd):
 
 def reset():
     os.system("kill -9 $(lsof -t -i:5111)")
-
+    os.system("kill -9 $(lsof -t -i:3500)")
+    os.system("kill -9 $(lsof -t -i:4450)")
 
 def init_gdb() -> Popen:
     
