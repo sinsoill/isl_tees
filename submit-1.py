@@ -1,12 +1,13 @@
 import os
 from subprocess import *
-import signal
+# import signal
 from time import sleep
-import re
+# import re
 
 PATH = "/home/isl/t1"
+node_prefix = ""
 
-COMMAND = 'set variable input = "<mes><action val=\"key-update\"/></mes>"'
+COMMAND = 'set variable input = "<mes><action type=\"key-update\"/></mes>"'
 
 def gdb_cmd_exec(p:Popen,cmd):
     print(cmd)
@@ -36,9 +37,11 @@ def init_gdb() -> Popen:
 
 def task1():
     SP = init_gdb()
+
     gdb_cmd_exec(SP, "break gcm_crypt_and_tag\n")
     gdb_cmd_exec(SP, "run sp_server.py\n")
-    os.system(f"cd {PATH}  && {PATH}/start.sh")
+    #os.system(f"cd {PATH}  && {PATH}/start.sh")
+    RP = Popen([f"{node_prefix}node", "--no-warnings", f"{PATH}/start.sh"])
     sleep(3)
     gdb_cmd_exec(SP, "continue\n")
     sleep(3)
