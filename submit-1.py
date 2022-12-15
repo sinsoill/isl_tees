@@ -9,6 +9,7 @@ PATH = "/home/isl/t1"
 COMMAND = 'set variable input = "<mes><action val=\"key-update\"/></mes>"'
 
 def gdb_cmd_exec(p:Popen,cmd):
+    print(cmd)
     i= p.stdin.write(cmd.encode())
     print(i)
     p.stdin.flush()
