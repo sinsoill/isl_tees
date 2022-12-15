@@ -9,7 +9,10 @@ PATH = "/home/isl/t1"
 COMMAND = 'set variable input = "<mes><action val=\"key-update\"/></mes>"'
 
 def gdb_cmd_exec(p:Popen,cmd):
-    p.communicate(cmd.encode())
+    i= p.stdin.write(cmd.encode())
+    print(i)
+    p.stdin.flush()
+    
 
 def reset():
     os.system("kill -9 $(lsof -t -i:5111)")
@@ -31,6 +34,7 @@ def init_gdb() -> Popen:
 
 def task1():
     SP = init_gdb()
+    SP.communicate()
     gdb_cmd_exec(SP, "break gcm_crypt_and_tag\n")
     gdb_cmd_exec(SP, "run sp_server.py\n")
     os.system(f"cd {PATH}  && {PATH}/start.sh")
