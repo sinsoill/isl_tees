@@ -18,8 +18,8 @@ def reset():
 
 def init_gdb() -> Popen:
     
-    os.system(f"cd {PATH} && {PATH}run_manager.sh ")
-    os.system(f"cd {PATH}  && {PATH}run_peripheral.sh ")
+    os.system(f"cd {PATH} && {PATH}/run_manager.sh ")
+    os.system(f"cd {PATH}  && {PATH}/run_peripheral.sh ")
 
     sleep(2)
     string_parser = Popen(['gdb', 'python3'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
