@@ -40,7 +40,8 @@ def task1():
     gdb_cmd_exec(SP, "continue\n")
     sleep(1)
     gdb_cmd_exec(SP, COMMAND+"\n")
-    
+    sleep(1)
+
 if __name__ == "__main__":
     reset()
     task1() 
