@@ -31,6 +31,7 @@ def init_gdb() -> Popen:
     gdb_cmd_exec(string_parser,'set pagination off\n')
     gdb_cmd_exec(string_parser,"set follow-fork-mode child\n")
     gdb_cmd_exec(string_parser,"set breakpoint pending on\n")
+    sleep(2)
     return string_parser
 
 def task1():
