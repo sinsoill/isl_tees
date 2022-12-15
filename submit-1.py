@@ -8,9 +8,8 @@ PATH = "/home/isl/t1"
 
 COMMAND = 'set variable input = "<mes><action val=\"key-update\"/></mes>"'
 
-def gdb_cmd_exec(p,cmd):
-    p.stdin.write(cmd.encode())
-    p.stdin.flush()
+def gdb_cmd_exec(p:Popen,cmd):
+    p.communicate(cmd.encode())
 
 def reset():
     os.system("kill -9 $(lsof -t -i:5111)")
