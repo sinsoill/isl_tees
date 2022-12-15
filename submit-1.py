@@ -27,7 +27,7 @@ def init_gdb() -> Popen:
     os.system(f"cd {PATH}  && {PATH}/run_peripheral.sh ")
 
     sleep(2)
-    string_parser = Popen(['gdb', 'python3'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    string_parser = Popen(['gdb','-q','python3'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
     sleep(1)
     gdb_cmd_exec(string_parser,'set pagination off\n')
     gdb_cmd_exec(string_parser,"set follow-fork-mode child\n")
