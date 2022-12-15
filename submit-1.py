@@ -6,7 +6,7 @@ import re
 
 PATH = "/home/isl/t1"
 
-COMMAND = '"set variable input = "<mes><action val=\"key-update\"/></mes>"'
+COMMAND = 'set variable input = "<mes><action val=\"key-update\"/></mes>"'
 
 def gdb_cmd_exec(p,cmd):
     p.stdin.write(cmd.encode())
@@ -33,7 +33,7 @@ def init_gdb() -> Popen:
 def task1():
     SP = init_gdb()
     gdb_cmd_exec(SP, "break gcm_crypt_and_tag\n")
-    gdb_cmd_exec(SP, f"run {PATH}/sp_server.py\n")
+    gdb_cmd_exec(SP, "run sp_server.py\n")
     os.system(f"cd {PATH}  && {PATH}/start.sh")
     sleep(3)
     gdb_cmd_exec(SP, "continue\n")
