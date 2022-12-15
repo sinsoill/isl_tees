@@ -20,24 +20,30 @@ def reset():
 
 def init_gdb() -> Popen:
     
-    os.system(f"cd {PATH} && {PATH}run_manager.sh ")
-    os.system(f"cd {PATH}  && {PATH}run_peripheral.sh ")
+    os.system(f"cd {PATH} && {PATH}/run_manager.sh ")
+    os.system(f"cd {PATH}  && {PATH}/run_peripheral.sh ")
 
     sleep(2)
-    string_parser = Popen(['gdb', '-q', '-x', f'{PATH}sp_server.py'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    string_parser = Popen(['gdb', 'screen'],shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     sleep(1)
     gdb_cmd_exec(string_parser,'set pagination off\n')
     gdb_cmd_exec(string_parser,"set follow-fork-mode child\n")
     gdb_cmd_exec(string_parser,"set breakpoint pending on\n")
-    sleep(2)
     return string_parser
 
 def task1():
     SP = init_gdb()
     gdb_cmd_exec(SP, "break gcm_crypt_and_tag\n")
+    gdb_cmd_exec(SP, f"run {PATH}/sp_server.py\n")
 
-    RP = Popen([f"{node_prefix}node", "--no-warnings", f"{path}remote_party"])
-
+    RP = Popen([f"{PATH}/start.sh\n"],shell=True)
+    sleep(1)
+    gdb_cmd_exec(SP,"c\n")
+    gdb_cmd_exec(SP,"c\n")
+    offset =""
+    while "input=0x7ff" not in offset:
+        offset = SP.stdout.readline().decode().rstrip()
+    print("offset: ",offset)
 def main():
     try:
         task1()
@@ -47,13 +53,4 @@ def main():
 
 if __name__ == "__main__":
     reset()
-    try:
-        main()
-    except Exception as e:
-        print(e)
-        print(f"An error occured in main!")
-    finally:
-        reset()
-    os.system("cd /home/isl/t1 && /home/isl/t1/run.sh")
-    print("Exploit done")
-    exit()
+    task1()
