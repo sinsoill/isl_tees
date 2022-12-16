@@ -1,79 +1,42 @@
 import os
-from subprocess import *
-# import signal
+import subprocess
 from time import sleep
-# import re
 
 PATH = "/home/isl/t1"
-node_prefix = ""
 
-COMMAND = 'set variable input = "<mes><action type=\"key-update\"/></mes>"'
+COMMAND = 'set variable input = "<mes><action type=\\"key-update\\"/></mes>"\n'
 
-def gdb_cmd_exec(p:Popen,cmd):
-    print(cmd)
-    i= p.stdin.write(cmd.encode())
-    print(i)
+def gdb_cmd_exec(p,cmd):
+    p.stdin.write(cmd.encode())
     p.stdin.flush()
     
 
 def reset():
+    os.system(f"{PATH}/run.sh")
+    os.system("ls")
     os.system("kill -9 $(lsof -t -i:5111)")
-    os.system("kill -9 $(lsof -t -i:3500)")
-    os.system("kill -9 $(lsof -t -i:4450)")
 
-def init_gdb() -> Popen:
+def init_gdb() ->subprocess.Popen:
     
-    os.system(f"cd {PATH} && {PATH}/run_manager.sh ")
-    os.system(f"cd {PATH}  && {PATH}/run_peripheral.sh ")
-
-    sleep(2)
-    string_parser = Popen(['gdb','python3','-q'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    sleep(1)
-    gdb_cmd_exec(string_parser,'set auto−load safe−path /\n')
-    gdb_cmd_exec(string_parser,'set pagination off\n')
-    gdb_cmd_exec(string_parser,"set follow-fork-mode child\n")
-    gdb_cmd_exec(string_parser,"set breakpoint pending on\n")
-    sleep(2)
-    return string_parser
+    SP = subprocess.Popen(['gdb','python3'], stdin=subprocess.PIPE)
+    gdb_cmd_exec(SP,"set breakpoint pending on\n")
+    return SP
 
 def task1():
-    SP = init_gdb()
-    gdb_cmd_exec(SP, "break gcm_crypt_and_tag\n")
-    gdb_cmd_exec(SP, "run sp_server.py\n")
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    gdb_cmd_exec(SP, "run sp_server.py\n")
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    print(SP.stdout.readline().decode().rstrip())
-    #os.system(f"cd {PATH}  && {PATH}/start.sh")
-    #RP = Popen([f"{PATH}/start.sh"],shell=True)
-    #sleep(3)
-    #gdb_cmd_exec(SP, "continue\n")
-    #sleep(3)
-    #gdb_cmd_exec(SP, "continue\n")
-    #sleep(3)
-    #gdb_cmd_exec(SP, COMMAND+"\n")
-    #sleep(3)
-    #SP.stdin.close()
-    #SP.stdout.close()
-if __name__ == "__main__":
     reset()
-    task1() 
+    SP = init_gdb()
+    sleep(1)
+    gdb_cmd_exec(SP, "break gcm_crypt_and_tag\n")
+    sleep(2)
+    gdb_cmd_exec(SP,"run sp_server.py\n")
+    sleep(2)
+    subprocess.Popen(["sh",f"{PATH}/start.sh"])
+    sleep(2)
+    gdb_cmd_exec(SP,"c\n")
+    gdb_cmd_exec(SP,COMMAND)
+    gdb_cmd_exec(SP,"c\n")
+    SP.stdin.close()
 
-
+if __name__ == "__main__":
+    os.chdir(PATH)
+    task1()
