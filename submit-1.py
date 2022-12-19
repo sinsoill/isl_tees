@@ -9,10 +9,11 @@ COMMAND = 'set variable input="<mes><action type=\\"key-update\\"/></mes>"\n'
 def gdb_cmd_exec(p,cmd):
     p.stdin.write(cmd.encode())
     p.stdin.flush()
+    sleep(3)
     
 
 def reset():
-    os.system(f"{PATH}/run.sh")
+    os.system("{}/run.sh".format(PATH))
     os.system("kill -9 $(lsof -t -i:5111)")
 
 def init_gdb():
@@ -26,15 +27,11 @@ def task1():
     SP = init_gdb()
     sleep(1)
     gdb_cmd_exec(SP, "break gcm_crypt_and_tag\n")
-    sleep(2)
     gdb_cmd_exec(SP,"run sp_server.py\n")
-    sleep(2)
     subprocess.Popen(["sh",f"{PATH}/start.sh"])
     sleep(3)
     gdb_cmd_exec(SP,"c\n")
-    sleep(3)
     gdb_cmd_exec(SP,COMMAND)
-    sleep(3)
     gdb_cmd_exec(SP,"c\n")
     
 
